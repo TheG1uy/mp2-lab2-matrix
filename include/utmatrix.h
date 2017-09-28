@@ -19,10 +19,11 @@ const int MAX_MATRIX_SIZE = 10000;
 template <class ValType>
 class TVector
 {
+private:
+	int StartIndex; // индекс первого элемента вектора
 protected:
   ValType *pVector;
   int Size;       // размер вектора
-  int StartIndex; // индекс первого элемента вектора
 public:
   TVector(int s = 10, int si = 0);
   TVector(const TVector &v);                // конструктор копирования
@@ -62,41 +63,78 @@ public:
 template <class ValType>
 TVector<ValType>::TVector(int s, int si)
 {
+	Size = s;
+	pVector = new ValType[Size];
+	StartIndex = si;
+	for (int i = 0; i < Size; i++)
+		pVector[i] = 0;
+
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> //конструктор копирования
 TVector<ValType>::TVector(const TVector<ValType> &v)
 {
+	Size = v.Size;
+	StartIndex = v.StartIndex;
+	pVector = new ValType[Size];
+	for (int i = 0; i < Size; i++)
+		pVector[i] = v.pVector[i];
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType>
 TVector<ValType>::~TVector()
 {
+	delete[] pVector;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
+	return pVector[pos];
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сравнение
 bool TVector<ValType>::operator==(const TVector &v) const
-{
+{ 
+	if (Size != v.Size) {
+		cout << "Несравнимые вектора" << endl; return 0;
+	}
+	else
+		for (int i = 0; i < Size; i++)
+			if (pVector[i] != v.pVector[i]) return false;
+	return true;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сравнение
 bool TVector<ValType>::operator!=(const TVector &v) const
 {
+	if (Size != v.Size) {
+		cout << "Несравнимые вектора" << endl; return 0;
+	}
+	else
+		for (int i = 0; i < Size; i++)
+			if (pVector[i] != v.pVector[i]) return true;
+	return false;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // присваивание
 TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 {
+	if (Size != v.Size) {
+		Size = v.Size;
+		delete[] pVector;
+		pVector = new ValType[Size];
+		StartIndex = v.StartIndex;
+	}
+	for (int i = 0; i < size; i++)
+		pVector[i] = v.pVector[i];
+	return *this;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // прибавить скаляр
 TVector<ValType> TVector<ValType>::operator+(const ValType &val)
 {
+
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // вычесть скаляр
@@ -107,21 +145,46 @@ TVector<ValType> TVector<ValType>::operator-(const ValType &val)
 template <class ValType> // умножить на скаляр
 TVector<ValType> TVector<ValType>::operator*(const ValType &val)
 {
+	TVector tmp(Size, StartIndex);
+	for (int i = 0; i < size; i++)
+		tmp.pVector[i] = pVector[i] *val;
+	return tmp;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сложение
 TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
 {
+	if (Size != v.Size) {
+		cout << "Разный размер" << endl; return 0;
+	}
+	TVector tmp(Size, StartIndex);
+	for (int i = 0; i < size; i++)
+		tmp.pVector[i] = pVector[i] + v.pVector[i];
+	return tmp;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // вычитание
 TVector<ValType> TVector<ValType>::operator-(const TVector<ValType> &v)
 {
+	if (Size != v.Size) {
+		cout << "Разный размер" << endl; return 0;
+	}
+	TVector tmp(Size, StartIndex);
+	for (int i = 0; i < size; i++)
+		tmp.pVector[i] = pVector[i] - v.pVector[i];
+	return tmp;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // скалярное произведение
 ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 {
+	if (Size != v.Size) {
+		cout << "Разный размер" << endl; return 0;
+	}
+	ValType a=0;
+	for (int i = 0; i < size; i++)
+		a += pVector[i] * v.pVector[i];
+	return a;
 } /*-------------------------------------------------------------------------*/
 
 
@@ -157,6 +220,8 @@ public:
 template <class ValType>
 TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
 {
+	for (int i = 0; i < s; i++)
+		pVector[i] = TVector<ValType>(s - i, i);
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // конструктор копирования
@@ -170,26 +235,38 @@ TMatrix<ValType>::TMatrix(const TVector<TVector<ValType> > &mt):
 template <class ValType> // сравнение
 bool TMatrix<ValType>::operator==(const TMatrix<ValType> &mt) const
 {
+	return TVector<TVector<ValType>>::operator==(mt);
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сравнение
 bool TMatrix<ValType>::operator!=(const TMatrix<ValType> &mt) const
 {
+	return TVector<TVector<ValType>>::operator!=(mt);
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // присваивание
 TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
 {
+	if (Size != mt.Size) {
+		Size = mt.Size;
+		delete[] pVector;
+		pVector = new TVector<ValType>[Size];
+	}
+	for (int i = 0; i < size; i++)
+		pVector[i] = vmt.pVector[i];
+	return *this;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сложение
 TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
 {
+	return TVector<TVector<ValType>>::operator+(mt);
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // вычитание
 TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
 {
+	return TVector<TVector<ValType>>::operator-(mt);
 } /*-------------------------------------------------------------------------*/
 
 // TVector О3 Л2 П4 С6
