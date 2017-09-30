@@ -90,7 +90,7 @@ TVector<ValType>::~TVector()
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
-	return pVector[pos];
+	if (pos<Size) return pVector[pos];
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // сравнение
@@ -126,7 +126,7 @@ TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 		pVector = new ValType[Size];
 		StartIndex = v.StartIndex;
 	}
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < Size; i++)
 		pVector[i] = v.pVector[i];
 	return *this;
 } /*-------------------------------------------------------------------------*/
@@ -134,18 +134,26 @@ TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 template <class ValType> // прибавить скаляр
 TVector<ValType> TVector<ValType>::operator+(const ValType &val)
 {
+	TVector<ValType> tmp(Size, StartIndex);
+	for(int i=0;i<Size;i++)
+		tmp.pVector[i]=pVector[i]+val;
+	return tmp;
 
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // вычесть скаляр
 TVector<ValType> TVector<ValType>::operator-(const ValType &val)
 {
+		TVector<ValType> tmp(Size, StartIndex);
+	for(int i=0;i<Size;i++)
+		tmp.pVector[i]=pVector[i]-val;
+	return tmp;
 } /*-------------------------------------------------------------------------*/
 
 template <class ValType> // умножить на скаляр
 TVector<ValType> TVector<ValType>::operator*(const ValType &val)
 {
-	TVector tmp(Size, StartIndex);
+	TVector<ValType> tmp(Size, StartIndex);
 	for (int i = 0; i < size; i++)
 		tmp.pVector[i] = pVector[i] *val;
 	return tmp;
@@ -157,8 +165,8 @@ TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
 	if (Size != v.Size) {
 		cout << "Разный размер" << endl; return 0;
 	}
-	TVector tmp(Size, StartIndex);
-	for (int i = 0; i < size; i++)
+	TVector<ValType> tmp(Size, StartIndex);
+	for (int i = 0; i < Size; i++)
 		tmp.pVector[i] = pVector[i] + v.pVector[i];
 	return tmp;
 } /*-------------------------------------------------------------------------*/
@@ -169,8 +177,8 @@ TVector<ValType> TVector<ValType>::operator-(const TVector<ValType> &v)
 	if (Size != v.Size) {
 		cout << "Разный размер" << endl; return 0;
 	}
-	TVector tmp(Size, StartIndex);
-	for (int i = 0; i < size; i++)
+	TVector<ValType> tmp(Size, StartIndex);
+	for (int i = 0; i < Size; i++)
 		tmp.pVector[i] = pVector[i] - v.pVector[i];
 	return tmp;
 } /*-------------------------------------------------------------------------*/
@@ -182,7 +190,7 @@ ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 		cout << "Разный размер" << endl; return 0;
 	}
 	ValType a=0;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < Size; i++)
 		a += pVector[i] * v.pVector[i];
 	return a;
 } /*-------------------------------------------------------------------------*/
@@ -252,8 +260,8 @@ TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
 		delete[] pVector;
 		pVector = new TVector<ValType>[Size];
 	}
-	for (int i = 0; i < size; i++)
-		pVector[i] = vmt.pVector[i];
+	for (int i = 0; i < Size; i++)
+		pVector[i] = mt.pVector[i];
 	return *this;
 } /*-------------------------------------------------------------------------*/
 
