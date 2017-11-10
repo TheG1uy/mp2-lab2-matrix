@@ -20,7 +20,6 @@ TEST(TMatrix, throws_when_create_matrix_with_negative_length)
 TEST(TMatrix, can_create_copied_matrix)
 {
   TMatrix<int> m(5);
-
   ASSERT_NO_THROW(TMatrix<int> m1(m));
 }
 
@@ -128,9 +127,8 @@ TEST(TMatrix, compare_matrix_with_itself_return_true)
 TEST(TMatrix, matrices_with_different_size_are_not_equal)
 {
   TMatrix<int> m(4);
-  TMatrix<int> m1(3);
-  
-  EXPECT_NE(true, m == m1);
+  TMatrix<int> m1(5);
+  EXPECT_EQ(!true,m1==m);
 }
 
 TEST(TMatrix, can_add_matrices_with_equal_size)
@@ -146,7 +144,7 @@ TEST(TMatrix, can_add_matrices_with_equal_size)
   TMatrix<int> m2(2);
   m2=m+m1;
 
-  EXPECT_EQ(true, m2 == m+m1);
+  EXPECT_EQ(m2, m+m1);
 }
 
 TEST(TMatrix, cant_add_matrices_with_not_equal_size)
@@ -170,7 +168,7 @@ TEST(TMatrix, can_subtract_matrices_with_equal_size)
   TMatrix<int> m2(2);
   m2=m-m1;
 
-  EXPECT_EQ(true, m2 == m-m1);
+  EXPECT_EQ(m2,m-m1);
 
 }
 

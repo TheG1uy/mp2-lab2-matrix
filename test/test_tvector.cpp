@@ -207,7 +207,7 @@ TEST(TVector, can_subtract_vectors_with_equal_size)
 	EXPECT_EQ(true, v-v1==res);
 }
 
-TEST(TVector, cant_subtract_vectors_with_not_equal_size)//вывод?
+TEST(TVector, cant_subtract_vectors_with_not_equal_size)
 {
   TVector<int> v(4);
   TVector<int> v1(5);
@@ -219,13 +219,13 @@ TEST(TVector, can_multiply_vectors_with_equal_size)
 {
   TVector<int> v(4);
   TVector<int> v1(4);
-  v[1]=3;
-  v1[1]=4;
+  v[0]=3;
+  v1[0]=4;
 
   EXPECT_EQ(12, v*v1);
 }
 
-TEST(TVector, cant_multiply_vectors_with_not_equal_size)//вывод
+TEST(TVector, cant_multiply_vectors_with_not_equal_size)
 {
   TVector<int> v(4);
   TVector<int> v1(5);
