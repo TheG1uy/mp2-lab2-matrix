@@ -106,11 +106,11 @@ TEST(TMatrix, compare_equal_matrices_return_true)
   TMatrix<int> m(2);
   m[0][0] = 10;
   m[0][1] = 2;
-  m[1][0] = 5;
+  m[1][1] = 5;
   TMatrix<int> m1(2);
   m1[0][0] = 10;
   m1[0][1] = 2;
-  m1[1][0] = 5;
+  m1[1][1] = 5;
   
   EXPECT_EQ(true, m == m1);
 }
@@ -118,8 +118,8 @@ TEST(TMatrix, compare_equal_matrices_return_true)
 TEST(TMatrix, compare_matrix_with_itself_return_true)
 {
   TMatrix<int> m(4);
-  m[2][1] = 10;
-  m[3][0] = 2;
+  m[2][2] = 10;
+  m[3][3] = 2;
   
   EXPECT_EQ(true, m == m);
 }
@@ -136,13 +136,15 @@ TEST(TMatrix, can_add_matrices_with_equal_size)
   TMatrix<int> m(2);
   m[0][0] = 10;
   m[0][1] = 2;
-  m[1][0] = 5;
+  m[1][1] = 5;
   TMatrix<int> m1(2);
   m1[0][0] = 10;
   m1[0][1] = 2;
-  m1[1][0] = 5;
+  m1[1][1] = 5;
   TMatrix<int> m2(2);
-  m2=m+m1;
+  m2[0][0]=20;
+  m2[0][1]=4;
+  m2[1][1]=10;
 
   EXPECT_EQ(m2, m+m1);
 }
@@ -160,13 +162,15 @@ TEST(TMatrix, can_subtract_matrices_with_equal_size)
   TMatrix<int> m(2);
   m[0][0] = 10;
   m[0][1] = 2;
-  m[1][0] = 5;
+  m[1][1] = 5;
   TMatrix<int> m1(2);
   m1[0][0] = 10;
   m1[0][1] = 2;
-  m1[1][0] = 5;
+  m1[1][1] = 5;
   TMatrix<int> m2(2);
-  m2=m-m1;
+  m2[0][0]=0;
+  m2[0][1]=0;
+  m2[1][1]=0;
 
   EXPECT_EQ(m2,m-m1);
 
